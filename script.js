@@ -35,10 +35,19 @@ function handleNoInteraction() {
     noBtn.innerText = randomText;
 
     // Make Yes button bigger
-    yesFontSize += 0.4;
+    // Check viewport width to determine growth rate
+    const isMobile = window.innerWidth < 768;
+    const growthRate = isMobile ? 0.2 : 0.4;
+    const maxFontSize = isMobile ? 3 : 5; // Limit max size on mobile
+
+    yesFontSize = Math.min(yesFontSize + growthRate, maxFontSize);
     yesBtn.style.fontSize = `${yesFontSize}rem`;
-    // Also increase padding to keep proportions
-    const currentPadding = 15 + (noClickCount * 5);
+
+    // Also increase padding to keep proportions, but cap it
+    const BasePadding = isMobile ? 10 : 15;
+    const growthPadding = (noClickCount * (isMobile ? 2 : 5));
+    const currentPadding = Math.min(BasePadding + growthPadding, isMobile ? 30 : 50);
+
     yesBtn.style.padding = `${currentPadding}px ${currentPadding * 2}px`;
 
     // Optional: Make No button smaller or move it
